@@ -25,9 +25,14 @@ function App() {
       <label>
         新任务：
         <input
-          value={taskText}
-          onChange={(event) => setTaskText(event.target.value)}
-        />
+  value={taskText}
+  onChange={(event) => setTaskText(event.target.value)}
+  onKeyDown={(event) => {
+    if (event.key === 'Enter') {
+      addTask()
+    }
+  }}
+/>
       </label>
 
       <button onClick={addTask}>
