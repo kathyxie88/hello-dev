@@ -14,6 +14,10 @@ function App() {
     setTaskText('')
   }
 
+  function deleteTask(taskToDelete: string) {
+    setTasks(tasks.filter((task) => task !== taskToDelete))
+  }
+
   return (
     <main>
       <h1>我的待办事项</h1>
@@ -32,7 +36,12 @@ function App() {
 
       <ul>
         {tasks.map((task) => (
-          <li key={task}>{task}</li>
+          <li key={task}>
+            <span>{task}</span>
+            <button onClick={() => deleteTask(task)}>
+              删除
+            </button>
+          </li>
         ))}
       </ul>
     </main>
