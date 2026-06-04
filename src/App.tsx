@@ -2,30 +2,39 @@ import { useState } from 'react'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
-  const [name, setName] = useState('Kathy')
+  const [taskText, setTaskText] = useState('')
+  const [tasks, setTasks] = useState<string[]>([])
+
+  function addTask() {
+    if (taskText.trim() === '') {
+      return
+    }
+
+    setTasks([...tasks, taskText])
+    setTaskText('')
+  }
 
   return (
     <main>
-      <h1>你好，{name}！</h1>
+      <h1>我的待办事项</h1>
 
       <label>
-        你的名字：
+        新任务：
         <input
-          value={name}
-          onChange={(event) => setName(event.target.value)}
+          value={taskText}
+          onChange={(event) => setTaskText(event.target.value)}
         />
       </label>
 
-      <p>当前数字：{count}</p>
-
-      <button onClick={() => setCount(count + 1)}>
-        +1
+      <button onClick={addTask}>
+        添加
       </button>
 
-      <button onClick={() => setCount(0)}>
-        重置
-      </button>
+      <ul>
+        {tasks.map((task) => (
+          <li key={task}>{task}</li>
+        ))}
+      </ul>
     </main>
   )
 }
