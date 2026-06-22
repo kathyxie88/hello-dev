@@ -1,21 +1,32 @@
 import { useState } from 'react'
 import './App.css'
 
+interface Task {
+  text: string
+  done: boolean
+}
+
 function App() {
   const [taskText, setTaskText] = useState('')
-  const [tasks, setTasks] = useState<string[]>([])
+  const [tasks, setTasks] = useState<Task[]>([])
 
   function addTask() {
     if (taskText.trim() === '') {
       return
     }
 
-    setTasks([...tasks, taskText])
+    setTasks([...tasks, { text: taskText, done: false }])
     setTaskText('')
   }
 
-  function deleteTask(taskToDelete: string) {
-    setTasks(tasks.filter((task) => task !== taskToDelete))
+  function toggleTask(index: number) {
+    setTasks(tasks.map((task, i) =>
+      i === index ? { ...task, done: !task.done } : task
+    ))
+  }
+
+  function deleteTask(index: number) {
+    setTasks(tasks.filter((_, i) => i !== index))
   }
 
   return (
@@ -25,14 +36,14 @@ function App() {
       <label>
         新任务：
         <input
-  value={taskText}
-  onChange={(event) => setTaskText(event.target.value)}
-  onKeyDown={(event) => {
-    if (event.key === 'Enter') {
-      addTask()
-    }
-  }}
-/>
+	  value={taskText}
+	  onChange={(event) => setTaskText(event.target.value)}
+	  onKeyDown={(event) => {
+	    if (event.key === 'Enter') {
+	      addTask()
+	    }
+	  }}
+	/>
       </label>
 
       <button onClick={addTask}>
@@ -40,10 +51,17 @@ function App() {
       </button>
 
       <ul>
-        {tasks.map((task) => (
-          <li key={task}>
-            <span>{task}</span>
-            <button onClick={() => deleteTask(task)}>
+        {tasks.map((task, index) => (
+          <li key={index}>
+            <label className="task-label">
+              <input
+                type="checkbox"
+                checked={task.done}
+                onChange={() => toggleTask(index)}
+              />
+              <span className={task.done ? 'done' : ''}>{task.text}</span>
+            </label>
+            <button onClick={() => deleteTask(index)}>
               删除
             </button>
           </li>
